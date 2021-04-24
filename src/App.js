@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import NavMenu from './components/NavMenu/NavMenu';
+import PokeCardsWrapper from './components/PokeCardsWrapper/PokeCardsWrapper';
+import PokeModal from './components/PokeModal/PokeModal';
+
+
+
 
 function App() {
+  const [movieQuery, setMovieQuery] = useState('');
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/">
+            <NavMenu
+              movieQuery={movieQuery}
+              setMovieQuery={setMovieQuery}
+            />
+            <PokeCardsWrapper
+              movieQuery={movieQuery}
+            />
+          </Route>
+          <Route path="/:id">
+            <PokeModal />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </div >
   );
 }
 
