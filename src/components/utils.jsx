@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Grid, Box, CardMedia } from '@material-ui/core';
 import { CircularProgress } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 
 export const Loader = () => {
@@ -47,42 +48,9 @@ export const getPosterImage = (imgQuery) => {
 };
 
 
-
-
-// const useFetchAllMovies = (movieQuery) => {
-//     console.log("useFetchAllMovies=>movieQuery=>", movieQuery)
-//     const [allMovies, setAllMovies] = useState([]);
-//     const [isLoading, setIsLoading] = useState(false);
-//     const [error, setError] = useState(false);
-
-
-//     useEffect(() => {
-//         handleAllMoviesFetch(movieQuery)
-//     }, [movieQuery])
-
-//     const handleAllMoviesFetch = (movieQuery) => {
-//         setIsLoading(true)
-//         fetch(`http://www.omdbapi.com/?apikey=3755d9aa&page=1&s=${movieQuery}`)
-//             .then(data => data.json())
-//             .then(movies => {
-//                 setIsLoading(false)
-//                 setAllMovies(movies)
-//                 console.log('fm', movies);
-//             })
-//             .catch(error => {
-//                 setIsLoading(false)
-//                 setError(true)
-//             })
-//     }
-
-//     return { allMovies, isLoading, error }
-
-// };
-// export default useFetchAllMovies;
-
-
-
-const useFetchAllMovies = (movieQuery, fetchSingleMovie = false, id) => {
+export const useFetchAllMovies = (movieQuery, fetchSingleMovie = false, id) => {
+    const location = useLocation();
+    // console.log('0_useFetchAllMovies_Start')
     const [allMovies, setAllMovies] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -90,27 +58,35 @@ const useFetchAllMovies = (movieQuery, fetchSingleMovie = false, id) => {
     useEffect(() => {
         const fetchSingleOrAllMoviesUrl = fetchSingleMovie
             ? `http://www.omdbapi.com/?apikey=3755d9aa&i=${id}`
-            : `http://www.omdbapi.com/?apikey=3755d9aa&page=1&s=${movieQuery}`;
+            : `http://www.omdbapi.com/?apikey=3755d9aa&page=${location.pageNum}&s=${movieQuery}`;
         handleAllMoviesFetch(fetchSingleOrAllMoviesUrl)
-    }, [movieQuery, fetchSingleMovie, id])
 
-    function handleAllMoviesFetch(fetchSingleOrAllMoviesUrl) {
-        setIsLoading(true)
-        fetch(fetchSingleOrAllMoviesUrl)
-            .then(data => data.json())
-            .then(movies => {
-                setIsLoading(false)
-                setAllMovies(movies)
-                console.log('<<<<<>>>>>>>>', movies);
-            })
-            .catch(error => {
-                setIsLoading(false)
-                setError(true)
-            })
-    }
+    }, [movieQuery, fetchSingleMovie, id, location.pageNum])
+
+    const handleAllMoviesFetch = async (fetchSingleOrAllMoviesUrl) => {
+        // console.log('....1_Start_FETCHING_MOVIES')
+        try {
+            setIsLoading(true)
+            const data = await fetch(fetchSingleOrAllMoviesUrl);
+            const movies = await data.json();
+            setIsLoading(false)
+            setAllMovies(movies)
+        } catch (err) {
+            setIsLoading(false)
+            setError(true)
+        }
+    };
 
     return { allMovies, isLoading, error }
 
 };
 
-export default useFetchAllMovies;
+
+
+export const getRatingScore = (allMovies) => {
+    if (allMovies.Ratings && allMovies.Ratings.length > 0) {
+        const rating = allMovies.Ratings[0].Value;
+        return Math.round((Number(rating.split('/')[0]) / 2))
+    }
+    return 1
+}

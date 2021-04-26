@@ -4,33 +4,28 @@ import { Button, Card, CardContent, CardMedia, CardHeader, CardActions, Paper } 
 import { useStyles } from './styles';
 import { Typography, Chip, Divider, Box } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
-import { useHistory } from "react-router-dom"
-import { getPosterImage, Loader, FallbackPage } from '../utils';
-import useFetchAllMovies from '../utils';
+import { useHistory, useParams } from "react-router-dom"
+import { getPosterImage, Loader, FallbackPage, getRatingScore } from '../utils';
+import { useFetchAllMovies } from '../utils';
 
 
 
-const PokeModal = () => {
+
+const PokeModal = ({ setCurrentPageRoute }) => {
     const classes = useStyles();
     const history = useHistory()
+    const params = useParams();
     const id = history.location.imdbID;
 
     const { allMovies, isLoading, error } = useFetchAllMovies(null, true, id);
-
-    const getRatingScore = () => {
-        if (allMovies.Ratings && allMovies.Ratings.length > 0) {
-            const rating = allMovies.Ratings[0].Value;
-            return Math.round((Number(rating.split('/')[0]) / 2))
-        }
-        return 1
-    }
 
 
     if (isLoading || allMovies === undefined) return <Loader />
 
     if (error) return <FallbackPage />
 
-    console.log('allMovies', allMovies);
+    console.log('%chistory', "color:gold");
+    console.log(history);
 
     return (
         <>
@@ -38,6 +33,7 @@ const PokeModal = () => {
                 <Grid container className={classes.modalWrapper} justify="center" alignItems="center">
                     <Grid className={classes.gridWrapper} item xs={12} s={8} >
                         <Card className={classes.cardStyles} elevation={5}>
+                            ID IS : {JSON.stringify(params)}
                             <CardMedia
                                 image={getPosterImage(allMovies.Poster)}
                                 className={classes.mediaStyles}
@@ -63,7 +59,7 @@ const PokeModal = () => {
                                     <Typography component="legend">Rating: </Typography>
                                     <Rating
                                         name="read-only"
-                                        value={getRatingScore()}
+                                        value={getRatingScore(allMovies)}
                                         readOnly />
                                 </Box>
                                 <Box mb={1}>
@@ -73,7 +69,13 @@ const PokeModal = () => {
                                 <CardActions className={classes.CardActionStyles}>
                                     <Button
                                         component={Button}
-                                        onClick={() => history.push('/')}
+                                        onClick={() => {
+                                            console.log('history.location.pageNum', history.location.pageNum);
+                                            // history.push(`/page${history.location.pageNum || 1}`)
+
+                                            // setCurrentPageRoute(history.location.pageNum)
+                                            history.goBack()
+                                        }}
                                         variant="outlined">Go Back
                                     </Button>
                                 </CardActions>

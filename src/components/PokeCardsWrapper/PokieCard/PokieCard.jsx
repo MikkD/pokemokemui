@@ -10,11 +10,14 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: "50%",
         width: "100%"
     }
-}))
+}));
 
 const PokieCard = ({ movie: { Title, Year, Poster, imdbID } }) => {
+    // console.log('PokieCard Rendered')
     const history = useHistory();
     const classes = useStyles();
+    // console.log('%chistory', "color:gold");
+    // console.log(history);
 
     return (
         <>
@@ -35,8 +38,9 @@ const PokieCard = ({ movie: { Title, Year, Poster, imdbID } }) => {
                                     variant="outlined"
                                     color="primary"
                                     onClick={() => history.push({
-                                        pathname: `/${imdbID}`,
-                                        imdbID
+                                        pathname: `/page${history.location.pageNum}/${imdbID}`,
+                                        imdbID,
+                                        pageNum: history.location.pageNum
                                     })}>
                                     Read more
                                 </Button>
