@@ -1,9 +1,40 @@
 import React from 'react'
-import { TextField } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField/TextField';
 import { useHistory } from 'react-router-dom';
+import { useDebounce } from 'use-debounce';
+import { useState, useEffect } from 'react';
+
 
 export default function Form({ movieQuery, setMovieQuery, setCurrentPageRoute }) {
     const history = useHistory();
+    const [localValue, setLocalValue] = useState('');
+    const [debouncedFormValue] = useDebounce(localValue, 700);
+
+    // No_Debounce_Approach
+    // const handleInputChange = (e) => {
+    //     const eventValue = e.target.value;
+
+    //     if (eventValue !== movieQuery) {
+    //         history.push({
+    //             pathname: '/',
+    //             pageNum: 1
+    //         })
+    //         setCurrentPageRoute(1)
+    //     }
+    //     setMovieQuery(eventValue)
+    // };
+
+    useEffect(() => {
+        if (debouncedFormValue !== movieQuery) {
+            history.push({
+                pathname: '/',
+                pageNum: 1
+            })
+            setCurrentPageRoute(1)
+        }
+        setMovieQuery(debouncedFormValue)
+    }, [debouncedFormValue, movieQuery, history, setCurrentPageRoute, setMovieQuery])
+
     return (
         <>
             <TextField
@@ -13,17 +44,10 @@ export default function Form({ movieQuery, setMovieQuery, setCurrentPageRoute })
                 label="Search Movie"
                 fullWidth={true}
                 autoFocus={true}
-                onChange={(e) => {
-                    if (e.target.value !== movieQuery) {
-                        history.push({
-                            pathname: '/',
-                            pageNum: 1
-                        })
-                        setCurrentPageRoute(1)
-                    }
-                    setMovieQuery(e.target.value)
-                }}
-                value={movieQuery}
+                onChange={(e) => setLocalValue(e.target.value)}
+                value={localValue}
+            // onChange={handleInputChange}
+            // value={movieQuery}
             />
         </>
     )

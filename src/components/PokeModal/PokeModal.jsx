@@ -15,15 +15,12 @@ const PokeModal = ({ setCurrentPageRoute }) => {
     const classes = useStyles();
     const history = useHistory()
     const id = history.location.imdbID;
-    console.log('history.location.pageNum==>>>', history.location.pageNum)
 
     const { allMovies, isLoading, error } = useFetchAllMovies(null, true, id);
 
     if (isLoading || allMovies === undefined) return <Loader />
 
     if (error) return <FallbackPage />
-
-
 
 
     return (
@@ -68,8 +65,6 @@ const PokeModal = ({ setCurrentPageRoute }) => {
                                     <Button
                                         component={Button}
                                         onClick={() => {
-                                            console.log('history.location.pageNum', history.location.pageNum);
-                                            console.log('history_MODAL', history);
                                             history.push({
                                                 pathname: `/page${history.location.pageNum}`,
                                                 pageNum: history.location.pageNum

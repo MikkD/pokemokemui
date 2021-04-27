@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Card, CardActions, CardHeader, CardContent, CardMedia, Grid, Paper, Typography } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
-import { Loader, ZeroResults, getPosterImage } from '../../utils';
+import { getPosterImage } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
     media: {
@@ -13,11 +13,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PokieCard = ({ movie: { Title, Year, Poster, imdbID }, currentPageRoute }) => {
-    // console.log('PokieCard Rendered')
     const history = useHistory();
     const classes = useStyles();
-    console.log('%chistory', "color:gold");
-    console.log(history.location.pageNum);
 
 
     return (
@@ -39,11 +36,9 @@ const PokieCard = ({ movie: { Title, Year, Poster, imdbID }, currentPageRoute })
                                     variant="outlined"
                                     color="primary"
                                     onClick={() => history.push({
-                                        // pathname: `/page${history.location.pageNum}/${imdbID}`,
                                         pathname: `/page${currentPageRoute}/${imdbID}`,
                                         imdbID,
                                         pageNum: currentPageRoute
-                                        // pageNum: history.location.pageNum
                                     })}>
                                     Read more
                                 </Button>

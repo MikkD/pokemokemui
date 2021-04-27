@@ -4,10 +4,12 @@ import NavMenu from './components/NavMenu/NavMenu';
 import PokeCardsWrapper from './components/PokeCardsWrapper/PokeCardsWrapper';
 import PokeModal from './components/PokeModal/PokeModal';
 import { ZeroResults, FallbackPage } from './components/utils';
+import { useDebounce } from 'use-debounce';
 
 function App() {
   const [movieQuery, setMovieQuery] = useState('');
   const [currentPageRoute, setCurrentPageRoute] = useState(1);
+  // const [value] = useDebounce(movieQuery, 1000);
 
   return (
     <div className="App">
@@ -25,6 +27,7 @@ function App() {
             {movieQuery
               ? <PokeCardsWrapper
                 movieQuery={movieQuery}
+                // movieQuery={value}
                 setCurrentPageRoute={setCurrentPageRoute}
                 currentPageRoute={currentPageRoute}
               />
