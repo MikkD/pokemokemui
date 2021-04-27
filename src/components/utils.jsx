@@ -50,16 +50,21 @@ export const getPosterImage = (imgQuery) => {
 
 export const useFetchAllMovies = (movieQuery, fetchSingleMovie = false, id) => {
     const location = useLocation();
-    // console.log('0_useFetchAllMovies_Start')
     const [allMovies, setAllMovies] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
 
     useEffect(() => {
+        // let isMounted = true;
         const fetchSingleOrAllMoviesUrl = fetchSingleMovie
             ? `http://www.omdbapi.com/?apikey=3755d9aa&i=${id}`
             : `http://www.omdbapi.com/?apikey=3755d9aa&page=${location.pageNum}&s=${movieQuery}`;
+        // if (isMounted) {
         handleAllMoviesFetch(fetchSingleOrAllMoviesUrl)
+        // }
+        // return (() => {
+        //     isMounted = false
+        // })
 
     }, [movieQuery, fetchSingleMovie, id, location.pageNum])
 

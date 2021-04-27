@@ -4,7 +4,7 @@ import { Button, Card, CardContent, CardMedia, CardHeader, CardActions, Paper } 
 import { useStyles } from './styles';
 import { Typography, Chip, Divider, Box } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory, useParams, useLocation } from "react-router-dom"
 import { getPosterImage, Loader, FallbackPage, getRatingScore } from '../utils';
 import { useFetchAllMovies } from '../utils';
 
@@ -14,18 +14,17 @@ import { useFetchAllMovies } from '../utils';
 const PokeModal = ({ setCurrentPageRoute }) => {
     const classes = useStyles();
     const history = useHistory()
-    const params = useParams();
     const id = history.location.imdbID;
+    console.log('history.location.pageNum==>>>', history.location.pageNum)
 
     const { allMovies, isLoading, error } = useFetchAllMovies(null, true, id);
-
 
     if (isLoading || allMovies === undefined) return <Loader />
 
     if (error) return <FallbackPage />
 
-    console.log('%chistory', "color:gold");
-    console.log(history);
+
+
 
     return (
         <>
@@ -33,7 +32,6 @@ const PokeModal = ({ setCurrentPageRoute }) => {
                 <Grid container className={classes.modalWrapper} justify="center" alignItems="center">
                     <Grid className={classes.gridWrapper} item xs={12} s={8} >
                         <Card className={classes.cardStyles} elevation={5}>
-                            ID IS : {JSON.stringify(params)}
                             <CardMedia
                                 image={getPosterImage(allMovies.Poster)}
                                 className={classes.mediaStyles}
@@ -71,10 +69,12 @@ const PokeModal = ({ setCurrentPageRoute }) => {
                                         component={Button}
                                         onClick={() => {
                                             console.log('history.location.pageNum', history.location.pageNum);
-                                            // history.push(`/page${history.location.pageNum || 1}`)
-
-                                            // setCurrentPageRoute(history.location.pageNum)
-                                            history.goBack()
+                                            console.log('history_MODAL', history);
+                                            history.push({
+                                                pathname: `/page${history.location.pageNum}`,
+                                                pageNum: history.location.pageNum
+                                            })
+                                            setCurrentPageRoute(history.location.pageNum)
                                         }}
                                         variant="outlined">Go Back
                                     </Button>

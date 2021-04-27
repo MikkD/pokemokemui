@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Box, Typography, Container, Grid } from '@material-ui/core';
 import { Loader, ZeroResults } from '../utils';
 import Pagination from '@material-ui/lab/Pagination';
@@ -9,12 +9,9 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 
 
-function PokeCardsWrapper({ movieQuery, setCurrentPageRoute }) {
+function PokeCardsWrapper({ movieQuery, setCurrentPageRoute, currentPageRoute }) {
     const history = useHistory();
     const location = useLocation();
-    console.log('location.pageNum------+_____', location.pageNum)
-
-
 
     const { allMovies, isLoading, error } = useFetchAllMovies(movieQuery);
 
@@ -24,8 +21,6 @@ function PokeCardsWrapper({ movieQuery, setCurrentPageRoute }) {
 
     if (error) return <Typography variant="h4">...Error</Typography>
 
-
-    console.log('movieQuery____+POKE_WRAPPER>', movieQuery)
     return (
         <>
 
@@ -34,7 +29,10 @@ function PokeCardsWrapper({ movieQuery, setCurrentPageRoute }) {
                 <Box my={2} >
                     <Grid container spacing={3}>
                         {allMovies.Search.map(movie =>
-                            <PokieCard key={uuid()} movie={movie} />
+                            <PokieCard
+                                key={uuid()}
+                                movie={movie}
+                                currentPageRoute={currentPageRoute} />
                         )}
                     </Grid>
                 </Box>
@@ -43,7 +41,7 @@ function PokeCardsWrapper({ movieQuery, setCurrentPageRoute }) {
                         size="large"
                         onChange={(event, page) => {
                             history.push({
-                                pathname: `/page${page}`,
+                                pathname: `/page${page || currentPageRoute}`,
                                 pageNum: page
                             })
                             setCurrentPageRoute(page)

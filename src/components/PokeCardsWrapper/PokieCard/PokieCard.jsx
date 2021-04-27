@@ -12,12 +12,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const PokieCard = ({ movie: { Title, Year, Poster, imdbID } }) => {
+const PokieCard = ({ movie: { Title, Year, Poster, imdbID }, currentPageRoute }) => {
     // console.log('PokieCard Rendered')
     const history = useHistory();
     const classes = useStyles();
-    // console.log('%chistory', "color:gold");
-    // console.log(history);
+    console.log('%chistory', "color:gold");
+    console.log(history.location.pageNum);
+
 
     return (
         <>
@@ -38,9 +39,11 @@ const PokieCard = ({ movie: { Title, Year, Poster, imdbID } }) => {
                                     variant="outlined"
                                     color="primary"
                                     onClick={() => history.push({
-                                        pathname: `/page${history.location.pageNum}/${imdbID}`,
+                                        // pathname: `/page${history.location.pageNum}/${imdbID}`,
+                                        pathname: `/page${currentPageRoute}/${imdbID}`,
                                         imdbID,
-                                        pageNum: history.location.pageNum
+                                        pageNum: currentPageRoute
+                                        // pageNum: history.location.pageNum
                                     })}>
                                     Read more
                                 </Button>
