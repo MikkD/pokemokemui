@@ -41,7 +41,7 @@ function PokeCardsWrapper({ movieQuery, setCurrentPageRoute, currentPageRoute })
                         size="large"
                         onChange={(event, page) => {
                             history.push({
-                                pathname: `/page${page || currentPageRoute}`,
+                                pathname: `/pokemoke/page${page || currentPageRoute}`,
                                 pageNum: page
                             })
                             setCurrentPageRoute(page)

@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 export default function Form({ movieQuery, setMovieQuery, setCurrentPageRoute }) {
     const history = useHistory();
     const [localValue, setLocalValue] = useState('');
-    const [debouncedFormValue] = useDebounce(localValue, 700);
+    const [debouncedFormValue] = useDebounce(localValue, 500);
 
     // No_Debounce_Approach
     // const handleInputChange = (e) => {
@@ -27,7 +27,7 @@ export default function Form({ movieQuery, setMovieQuery, setCurrentPageRoute })
     useEffect(() => {
         if (debouncedFormValue !== movieQuery) {
             history.push({
-                pathname: '/',
+                pathname: '/pokemoke',
                 pageNum: 1
             })
             setCurrentPageRoute(1)

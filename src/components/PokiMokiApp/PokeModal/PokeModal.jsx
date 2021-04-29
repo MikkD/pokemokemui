@@ -66,7 +66,7 @@ const PokeModal = ({ setCurrentPageRoute }) => {
                                         component={Button}
                                         onClick={() => {
                                             history.push({
-                                                pathname: `/page${history.location.pageNum}`,
+                                                pathname: `/pokemoke/page${history.location.pageNum}`,
                                                 pageNum: history.location.pageNum
                                             })
                                             setCurrentPageRoute(history.location.pageNum)

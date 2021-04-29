@@ -36,7 +36,7 @@ const PokieCard = ({ movie: { Title, Year, Poster, imdbID }, currentPageRoute })
                                     variant="outlined"
                                     color="primary"
                                     onClick={() => history.push({
-                                        pathname: `/page${currentPageRoute}/${imdbID}`,
+                                        pathname: `/pokemoke/page${currentPageRoute}/${imdbID}`,
                                         imdbID,
                                         pageNum: currentPageRoute
                                     })}>
