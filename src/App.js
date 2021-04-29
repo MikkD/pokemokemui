@@ -5,47 +5,53 @@ import MyBread from './components/MyBread/MyBread';
 import Timer from './components/Timer/Timer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemLink from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
+import Hidden from '@material-ui/core/Hidden';
+import withWidth from '@material-ui/core/withWidth';
+import { store } from './redux/store';
+import { Provider } from 'react-redux';
+import MySnackBar from './components/MyBread/MySnackBar';
 
 function App() {
 
 
   return (
-    <div className="App">
-
-      <BrowserRouter>
-        <GlobalNav />
-        <Switch>
-          <Route exact path="/pokemoke">
-            <PokeMokeApp />
-          </Route>
-          <Route path="/mybread">
-            <MyBread />
-          </Route>
-          <Route exact path="/timer">
-            <Timer />
-          </Route>
-        </Switch>
-      </BrowserRouter>
-    </div >
+    <Provider store={store}>
+      <div className="App">
+        <BrowserRouter>
+          <GlobalNav />
+          <Switch>
+            <Route exact path="/pokemoke">
+              <PokeMokeApp />
+            </Route>
+            <Route path="/mybread">
+              <MyBread />
+            </Route>
+            <Route exact path="/timer">
+              <Timer />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      </div >
+    </Provider>
   );
 }
 
 export default App;
 
 
-function GlobalNav() {
+function GlobalNavToWrap() {
 
   const routes = [
+    {
+      path: "/",
+      name: "Main"
+    },
     {
       path: "/pokemoke",
       component: <PokeMokeApp />,
@@ -61,27 +67,31 @@ function GlobalNav() {
       component: <Timer />,
       name: "Timer"
     }
-  ]
+  ];
 
 
   return (
     <AppBar position="static">
       <Toolbar variant="dense" style={{ display: "flex", justifyContent: "space-between" }}>
-        <List style={{ display: 'flex' }} component="nav" aria-label="global-navigation-menu">
-          {routes.map(route =>
-            <ListItem
-              button
-              component={Link}
-              key={route.name}
-              to={route.path}>
-              <ListItemText primary={route.name} />
-            </ListItem>
-          )}
-        </List>
+        <Hidden xsDown>
+          <List style={{ display: 'flex' }} component="nav" aria-label="global-navigation-menu">
+            {routes.map(route =>
+              <ListItem
+                button
+                component={Link}
+                key={route.name}
+                to={route.path}>
+                <ListItemText primary={route.name} />
+              </ListItem>
+            )}
+          </List>
+        </Hidden>
         <IconButton edge="start" color="inherit" aria-label="menu">
           <MenuIcon />
         </IconButton>
       </Toolbar>
+      <MySnackBar />
     </AppBar >
   )
 };
+const GlobalNav = withWidth()(GlobalNavToWrap)
