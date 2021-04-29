@@ -1,27 +1,21 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Container, Grid, Typography } from '@material-ui/core';
 import { Card, CardContent, CardHeader, Paper } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import { List } from '@material-ui/core';
 import { ListItem } from '@material-ui/core';
 import { ListItemText } from '@material-ui/core';
+// import { ListItemLink } from '@material-ui/core';
 import { Collapse } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { withRouter } from 'react-router-dom';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 
 
 
 function MyBread({ match, history, location: { pathname } }) {
-    console.log('_______')
-    console.log('history', history);
-    console.log('match', match);
-    console.log('pathname', pathname);
-    console.log('_______')
-    console.log(match.path);
-
-
-    const cleanPathNames = pathname.split('/').filter((el, index) => index > 0)
 
     const routeMapping = [
         {
@@ -30,7 +24,8 @@ function MyBread({ match, history, location: { pathname } }) {
         },
         {
             name: 'trash',
-            path: `${match.path}/trash`
+            path: `${match.path}/trash`,
+            nestedRoute: `${match.path}/trash/nested`,
         },
         {
             name: 'spam',
@@ -46,35 +41,43 @@ function MyBread({ match, history, location: { pathname } }) {
                 <Card>
                     <CardHeader title="BreadCrumbs" />
                     <CardContent style={{ textAlign: "center" }}>
-                        <Breadcrumbs>
-                            {cleanPathNames.map((el, index) => {
-                                const lastItem = cleanPathNames.indexOf(cleanPathNames[cleanPathNames.length - 1]) === index;
-                                if (lastItem) return <Typography color="inherit">{el}</Typography>
-                                return <Button component={Link} to={`/${el}`} >{el}</Button>
-                            })}
-                        </Breadcrumbs>
+                        <MyBreadCrumbs pathname={pathname} />
                         <List>
-                            {routeMapping.map(route => (
+                            {routeMapping.map((route, index) => (
                                 <ListItem
                                     button
-                                    // onClick={() => history.push(`/mybread/${route.name}`)}
-                                    onClick={() => history.push(`/${match.path}/${route.name}`)}
-                                    key={route.name}
-                                >
+                                    onClick={() => {
+                                        history.push(`/mybread/${route.name}`)
+                                    }}
+                                    key={route.name}>
                                     <ListItemText primary={route.name} />
-                                </ListItem>
-                            ))}
+                                </ListItem>)
+                            )}
                         </List>
-
                     </CardContent>
                 </Card>
             </Paper>
-        </Container >
+        </Container>
     )
 }
 
 export default withRouter(MyBread)
 
+
+
+const MyBreadCrumbs = ({ pathname }) => {
+    const cleanPathNames = pathname.split('/').filter((el, index) => index > 0)
+    return (
+        <Breadcrumbs>
+            <Button component={Link} to={`/`} >Main</Button>
+            {cleanPathNames.map((el, index) => {
+                const lastItem = cleanPathNames.indexOf(cleanPathNames[cleanPathNames.length - 1]) === index;
+                if (lastItem) return <Typography color="inherit">{el}</Typography>
+                return <Button component={Link} to={`/${el}`} >{el}</Button>
+            })}
+        </Breadcrumbs>
+    )
+};
 
 function ForwardComp() {
     const inputRef = useRef();
@@ -96,7 +99,6 @@ function ForwardComp() {
 };
 
 function Parent({ handleFocus }) {
-
     return (
         <>
             <Button
