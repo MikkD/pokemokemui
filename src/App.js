@@ -1,8 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
-import PokeMokeApp from './components/PokiMokiApp/PokeMokeApp';
-import MyBread from './components/MyBread/MyBread';
-import Timer from './components/Timer/Timer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,86 +9,116 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import Hidden from '@material-ui/core/Hidden';
-import withWidth from '@material-ui/core/withWidth';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
+import { routes } from './utils';
 import MySnackBar from './components/MyBread/MySnackBar';
+import Accordio from './components/Accordio/Accordio';
+import PokeMokeApp from './components/PokiMokiApp/PokeMokeApp';
+import MyBread from './components/MyBread/MyBread';
+import Timer from './components/Timer/Timer';
+import { Menu, MenuItem } from '@material-ui/core';
+import { useStyles } from './utils';
+import { createMuiTheme, ThemeProvider, useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+
 
 function App() {
-
+  const theme = createMuiTheme();
 
   return (
-    <Provider store={store}>
-      <div className="App">
-        <BrowserRouter>
-          <GlobalNav />
-          <Switch>
-            <Route exact path="/pokemoke">
-              <PokeMokeApp />
-            </Route>
-            <Route path="/mybread">
-              <MyBread />
-            </Route>
-            <Route exact path="/timer">
-              <Timer />
-            </Route>
-          </Switch>
-        </BrowserRouter>
-      </div >
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <div className="App">
+          <BrowserRouter>
+            <GlobalNav />
+            <Switch>
+              <Route exact path="/pokemoke">
+                <PokeMokeApp />
+              </Route>
+              <Route path="/mybread">
+                <MyBread />
+              </Route>
+              <Route exact path="/timer">
+                <Timer />
+              </Route>
+              <Route exact path="/accordion">
+                <Accordio />
+              </Route>
+            </Switch>
+          </BrowserRouter>
+        </div >
+      </Provider>
+    </ThemeProvider>
   );
 }
 
 export default App;
 
 
-function GlobalNavToWrap() {
+function GlobalNav() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
 
-  const routes = [
-    {
-      path: "/",
-      name: "Main"
-    },
-    {
-      path: "/pokemoke",
-      component: <PokeMokeApp />,
-      name: "PokeMokeApp"
-    },
-    {
-      path: "/mybread",
-      component: <MyBread />,
-      name: "MyBread"
-    },
-    {
-      path: "/timer",
-      component: <Timer />,
-      name: "Timer"
-    }
-  ];
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const theme = useTheme();
+  const xsAndDown = useMediaQuery(theme.breakpoints.down("xs"));
+
+
 
 
   return (
     <AppBar position="static">
       <Toolbar variant="dense" style={{ display: "flex", justifyContent: "space-between" }}>
-        <Hidden xsDown>
-          <List style={{ display: 'flex' }} component="nav" aria-label="global-navigation-menu">
-            {routes.map(route =>
-              <ListItem
-                button
-                component={Link}
-                key={route.name}
-                to={route.path}>
-                <ListItemText primary={route.name} />
-              </ListItem>
-            )}
-          </List>
-        </Hidden>
-        <IconButton edge="start" color="inherit" aria-label="menu">
-          <MenuIcon />
-        </IconButton>
+        {!xsAndDown && <TheList routes={routes} />}
+        {xsAndDown &&
+          <IconButton onClick={handleMenu} edge="start" color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+        }
+        <Menu
+          anchorEl={anchorEl}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          keepMounted
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          open={open}
+          onClose={handleClose}
+        >
+          <TheList routes={routes} />
+        </Menu>
       </Toolbar>
       <MySnackBar />
     </AppBar >
   )
 };
-const GlobalNav = withWidth()(GlobalNavToWrap)
+
+
+
+const TheList = ({ routes }) => {
+  const classes = useStyles()
+  return (
+    <List className={classes.menu} component="nav" aria-label="global-navigation-menu" >
+      {routes.map(route => <TheListItem key={route.name} {...route} />)}
+    </List >
+  )
+};
+
+const TheListItem = ({ name, path }) => {
+  return (
+    <ListItem
+      button
+      component={Link}
+      key={name}
+      to={path}>
+      <ListItemText primary={name} />
+    </ListItem>
+  )
+};

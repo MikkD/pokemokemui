@@ -1,12 +1,10 @@
 import { snackBarTypes } from './snackBarTypes';
-import { Slide } from "@material-ui/core";
-import { Fade } from "@material-ui/core";
-import { Glide } from "@material-ui/core";
+
 
 const INITIAL_STATE = {
     isActive: false,
     message: 'default message',
-    transition: Slide,
+    transition: null,
     severity: "sucess"
 };
 
@@ -18,6 +16,7 @@ const snackBarReducer = (state = INITIAL_STATE, action) => {
                 isActive: true,
                 severity: action.payload.severity,
                 message: action.payload.message,
+                transition: action.payload.transition
             }
         case snackBarTypes.CLOSE_SNACKBAR:
             return {

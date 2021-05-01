@@ -6,15 +6,12 @@ import { List } from '@material-ui/core';
 import { ListItem } from '@material-ui/core';
 import { ListItemText } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { Snackbar, } from '@material-ui/core';
-import MuiAlert from '@material-ui/lab/Alert';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { withRouter } from 'react-router-dom';
 import Fade from '@material-ui/core/Fade';
 import Slide from '@material-ui/core/Slide';
 import Grow from '@material-ui/core/Grow';
-import { useSelector, useDispatch } from 'react-redux';
-import MySnackBar from './MySnackBar';
+import { useDispatch } from 'react-redux';
 
 
 
@@ -23,35 +20,37 @@ function MyBread({ match, history, location: { pathname } }) {
     const routeMapping = [
         {
             name: 'inbox',
-            path: `${match.path}/inbox`,
+            path: `/${match.path}/inbox`,
             message: "Inbox snacks",
-            severity: "success"
+            severity: "success",
+            transition: Fade
         },
         {
             name: 'trash',
-            path: `${match.path}/trash`,
+            path: `/${match.path}/trash`,
             nestedRoute: `${match.path}/trash/nested`,
             message: "errro 606 ",
-            severity: "error"
+            severity: "error",
+            transition: Slide
         },
         {
             name: 'spam',
-            path: `${match.path}/spam`,
+            path: `/${match.path}/spam`,
             message: "Be aware of wolfs",
-            severity: "warning"
+            severity: "warning",
+            transition: Grow
         }
     ];
 
 
     const dispatch = useDispatch();
 
-    const handleOpenSnackBar = (severity, message) => {
+    const activateSnackBar = (severity, message, transition) => {
         dispatch({
             type: "OPEN_SNACKBAR",
-            payload: { severity, message }
+            payload: { severity, message, transition }
         })
     };
-
 
     return (
         <Container>
@@ -62,16 +61,18 @@ function MyBread({ match, history, location: { pathname } }) {
                     <CardContent style={{ textAlign: "center" }}>
                         <MyBreadCrumbs pathname={pathname} />
                         <List>
-                            {routeMapping.map((route) => (
-                                <ListItem
-                                    key={route.name}
+                            {routeMapping.map((route) => {
+                                const { name, path, severity, message, transition } = route;
+                                return <ListItem
+                                    key={name}
                                     button
                                     onClick={() => {
-                                        history.push(`/mybread/${route.name}`)
-                                        handleOpenSnackBar(route.severity, route.message)
+                                        history.push(`/mybread/${name}`)
+                                        activateSnackBar(severity, message, transition)
                                     }}>
-                                    <ListItemText primary={route.name} />
-                                </ListItem>)
+                                    <ListItemText primary={name} />
+                                </ListItem>
+                            }
                             )}
                         </List>
                     </CardContent>
@@ -86,18 +87,14 @@ export default withRouter(MyBread)
 
 
 const MyBreadCrumbs = ({ pathname }) => {
-    const mappedState = useSelector(state => state.snackBarReducer.isActive);
-    console.log('mappedState', mappedState)
-    const dispatch = useDispatch();
-
     const cleanPathNames = pathname.split('/').filter((el, index) => index > 0);
     return (
         <Breadcrumbs>
             <Button component={Link} to={`/`} >Main</Button>
             {cleanPathNames.map((el, index) => {
                 const lastItem = cleanPathNames.indexOf(cleanPathNames[cleanPathNames.length - 1]) === index;
-                if (lastItem) return <Typography key={index} color="inherit">{el}</Typography>
-                return <Button key={index} component={Link} to={`/${el}`} >{el}</Button>
+                if (!lastItem) return <Button key={index} component={Link} to={`/${el}`} >{el}</Button>
+                return <Typography key={index} color="inherit">{el}</Typography>
             })}
         </Breadcrumbs>
     )
