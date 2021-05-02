@@ -3,6 +3,7 @@ import Accordio from './components/Accordio/Accordio';
 import PokeMokeApp from './components/PokiMokiApp/PokeMokeApp';
 import MyBread from './components/MyBread/MyBread';
 import Timer from './components/Timer/Timer';
+import TodosApp from './components/TodosApp/TodosApp';
 import { makeStyles } from '@material-ui/core';
 
 export const routes = [
@@ -29,6 +30,11 @@ export const routes = [
         path: "/accordion",
         component: <Accordio />,
         name: "Accordion"
+    },
+    {
+        path: "/todos",
+        component: <TodosApp />,
+        name: "TodosApp"
     }
 ];
 

@@ -6,9 +6,7 @@ import KeyboardArrowDownRoundedIcon from '@material-ui/icons/KeyboardArrowDownRo
 import { Typography } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchMovies } from '../../redux/accordion/accordionReducer';
-import { createSelector } from 'reselect'
 import InputForm from './InputForm';
-import CustomBlock from '../CustomBlock/CustomBlock';
 const data = [
     {
         title: 'Bode',
@@ -28,7 +26,6 @@ const data = [
 
 function Accordio() {
     const dispatch = useDispatch();
-    // const { movies, isFetching, error, inputValue } = useSelector(state => state.accordionReducer);
     const { movies } = useSelector(state => state.accordionReducer);
     const { isFetching } = useSelector(state => state.accordionReducer);
     const { error } = useSelector(state => state.accordionReducer);
@@ -37,12 +34,6 @@ function Accordio() {
     useEffect(() => {
         dispatch(fetchMovies())
     }, [])
-
-    // *MUI Approach
-    // const toggleAccordion = (id) => (event, isExpanded) => {
-    //     setActiveId(isExpanded ? id : false)
-    // }
-
 
     if (isFetching) return <h4>...Loading</h4>;
 
@@ -60,25 +51,19 @@ function Accordio() {
 
 export default Accordio;
 
-const AccordionItems = React.memo(({ movies }) => {
+const AccordionItems = ({ movies }) => {
     console.log('%cAccordionItems=>Render', "color:brown")
-    const [acc, setAcc] = useState(data);
-    const toggleAccordion = (id) => {
-        setAcc((state) => state.map((el =>
-            el.id === id
-                ? ({ ...el, isActive: !el.isActive })
-                : ({ ...el, isActive: false })
-        )))
-    };
-
     return (
         <>
             {movies.map(movie => {
-                const { imdbID, Title } = movie;
+                const { imdbID, Title, isActive } = movie;
                 return (
-                    <Accordion key={imdbID} expanded={true} onChange={() => toggleAccordion(imdbID)}>
+                    <Accordion
+                        key={imdbID}
+                        expanded={isActive}
+                    >
                         <AccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon />}>
-                            <Typography variant="h5">{imdbID}</Typography>
+                            <Typography variant="h5">{Title}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             {Title}
@@ -87,8 +72,6 @@ const AccordionItems = React.memo(({ movies }) => {
                 )
             }
             )}
-
-
         </>
     )
-})
+};

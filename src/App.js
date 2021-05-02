@@ -7,20 +7,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { routes } from './utils';
 import MySnackBar from './components/MyBread/MySnackBar';
-import Accordio from './components/Accordio/Accordio';
-import PokeMokeApp from './components/PokiMokiApp/PokeMokeApp';
-import MyBread from './components/MyBread/MyBread';
-import Timer from './components/Timer/Timer';
-import { Menu, MenuItem } from '@material-ui/core';
+import { Menu } from '@material-ui/core';
 import { useStyles } from './utils';
 import { createMuiTheme, ThemeProvider, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import CustomBlock from './components/CustomBlock/CustomBlock';
 
 
 function App() {
@@ -32,20 +26,15 @@ function App() {
         <div className="App">
           <BrowserRouter>
             <GlobalNav />
-            <CustomBlock />
+            {/* <CustomBlock /> */}
             <Switch>
-              <Route exact path="/pokemoke">
-                <PokeMokeApp />
-              </Route>
-              <Route path="/mybread">
-                <MyBread />
-              </Route>
-              <Route exact path="/timer">
-                <Timer />
-              </Route>
-              <Route exact path="/accordion">
-                <Accordio />
-              </Route>
+              {routes.map(route =>
+                <Route
+                  key={route.path}
+                  exact path={`${route.path}`}
+                >
+                  {route.component}
+                </Route>)}
             </Switch>
           </BrowserRouter>
         </div >
