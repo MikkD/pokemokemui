@@ -22,7 +22,8 @@ const accordionTypes = {
     START_FETCHING: "START_FETCHING",
     END_FETCHING: "END_FETCHING",
     IS_ERROR: "IS_ERROR",
-    HANDLE_INPUT: "HANDLE_INPUT"
+    HANDLE_INPUT: "HANDLE_INPUT",
+    ADD_TODO: "ADD_TODO"
 };
 
 
@@ -49,6 +50,11 @@ const accordionReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 inputValue: action.payload
+            }
+        case accordionTypes.ADD_TODO:
+            return {
+                ...state,
+                todos: [...state.todos, action.payload]
             }
         default:
             return state

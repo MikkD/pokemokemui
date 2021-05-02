@@ -7,6 +7,8 @@ import { Typography } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchMovies } from '../../redux/accordion/accordionReducer';
 import { createSelector } from 'reselect'
+import InputForm from './InputForm';
+import CustomBlock from '../CustomBlock/CustomBlock';
 const data = [
     {
         title: 'Bode',
@@ -27,18 +29,14 @@ const data = [
 function Accordio() {
     const dispatch = useDispatch();
     // const { movies, isFetching, error, inputValue } = useSelector(state => state.accordionReducer);
-    // const { movies } = useSelector(state => state.accordionReducer);
+    const { movies } = useSelector(state => state.accordionReducer);
     const { isFetching } = useSelector(state => state.accordionReducer);
     const { error } = useSelector(state => state.accordionReducer);
-    const { inputValue } = useSelector(state => state.accordionReducer);
-    const memoizedMovies = createSelector(state => state.accordionReducer.movies);
-    const movies = useSelector(memoizedMovies);
+    const memoizedMovies = useMemo(() => movies, [movies])
 
     useEffect(() => {
         dispatch(fetchMovies())
     }, [])
-
-    // const memoizedMovies = useMemo(() => movies, [movies])
 
     // *MUI Approach
     // const toggleAccordion = (id) => (event, isExpanded) => {
@@ -52,23 +50,17 @@ function Accordio() {
 
     return (
         <>
-            <input
-                value={inputValue}
-                onChange={(e) =>
-                    dispatch({ type: "HANDLE_INPUT", payload: e.target.value })}
-            />
+            <InputForm />
             <Typography variant="h4">Accordion </Typography>
-            <AccordionItems movies={movies} />
-
-
-
+            {/* <AccordionItems movies={movies} /> */}
+            <AccordionItems movies={memoizedMovies} />
         </>
     )
 }
 
 export default Accordio;
 
-const AccordionItems = ({ movies }) => {
+const AccordionItems = React.memo(({ movies }) => {
     console.log('%cAccordionItems=>Render', "color:brown")
     const [acc, setAcc] = useState(data);
     const toggleAccordion = (id) => {
@@ -99,4 +91,4 @@ const AccordionItems = ({ movies }) => {
 
         </>
     )
-}
+})

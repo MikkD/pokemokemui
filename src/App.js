@@ -8,7 +8,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import Hidden from '@material-ui/core/Hidden';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { routes } from './utils';
@@ -21,6 +20,7 @@ import { Menu, MenuItem } from '@material-ui/core';
 import { useStyles } from './utils';
 import { createMuiTheme, ThemeProvider, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import CustomBlock from './components/CustomBlock/CustomBlock';
 
 
 function App() {
@@ -32,6 +32,7 @@ function App() {
         <div className="App">
           <BrowserRouter>
             <GlobalNav />
+            <CustomBlock />
             <Switch>
               <Route exact path="/pokemoke">
                 <PokeMokeApp />
@@ -102,14 +103,14 @@ function GlobalNav() {
 
 
 
-const TheList = ({ routes }) => {
+const TheList = React.forwardRef(({ routes }, ref) => {
   const classes = useStyles()
   return (
     <List className={classes.menu} component="nav" aria-label="global-navigation-menu" >
       {routes.map(route => <TheListItem key={route.name} {...route} />)}
     </List >
   )
-};
+});
 
 const TheListItem = ({ name, path }) => {
   return (
