@@ -25,17 +25,16 @@ function TodosApp({ todos, isError, isFetching, fetchTodos, urgentTodos, toggleU
             <Container>
                 <Grid container direction="column">
                     <TodoForm />
-                    {/* {urgentTodos.length > 1 && */}
                     <TheListComponent
                         listName={'Urgent Todos'}
+                        isUrgent={true}
                         color="secondary"
                         toggleTodo={toggleUrgentTodo}
                         todos={urgentTodos} />
-                    {/* } */}
+
                     <TheListComponent
                         listName={'Default Todos'}
                         toggleTodo={toggleTodo}
-                        // addUrgentTodo={addUrgentTodo}
                         todos={todos} />
                 </Grid>
             </Container>

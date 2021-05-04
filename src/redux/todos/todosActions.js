@@ -21,9 +21,7 @@ export const toggleTodo = (id) => ({ type: todosTypes.TOGGLE_TODO, payload: id }
 
 export const toggleUrgentTodo = (id) => ({ type: todosTypes.TOGGLE_URGENT_TODO, payload: id });
 
-export const deleteTodo = (id) => ({ type: todosTypes.DELETE_TODO, payload: id });
-
-// export const deleteUrgentTodo = (id) => ({ type: todosTypes.DELETE_URGENT_TODO, payload: id });
+export const deleteTodo = (id) => ({ type: todosTypes.DELETE_TODO, payload: id })
 
 export const addTodo = (newTodo) => ({ type: todosTypes.ADD_TODO, payload: newTodo });
 

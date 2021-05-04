@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 
 export const todosSelector = (state) => state.todosReducer.todos;
 
+
 export const todosSelectorSize = (state) => state.todosReducer.todos.length;
 
 export const urgentTodosSelector = (state) => state.todosReducer.urgentTodos;

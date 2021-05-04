@@ -9,11 +9,10 @@ const TheListItem = ({
     todo: { id, completed, title },
     toggleTodo,
     deleteTodo,
-    addUrgentTodo
+    addUrgentTodo,
+    isUrgentTodo
 }) => {
     console.log('THE_LIST_ITEM_RENDERED')
-
-    // const isUrgent = urgentTodos.some(urgentTodo => urgentTodo.id === id)
 
     return (
         <React.Fragment>
@@ -28,11 +27,9 @@ const TheListItem = ({
                 <ListItemText primary={title} />
                 <ListItemIcon
                     aria-label="add urgent todo"
-                    onClick={() => addUrgentTodo(id)}
-                >
+                    onClick={() => addUrgentTodo(id)}>
                     <IconButton>
-                        {/* {!isUrgent && <AssignmentLateIcon color="error" />} */}
-                        <AssignmentLateIcon color="error" />
+                        {!isUrgentTodo && <AssignmentLateIcon color="error" />}
                     </IconButton>
                 </ListItemIcon>
                 <Divider style={{ width: '1px', height: '20px' }} />
@@ -49,7 +46,6 @@ const TheListItem = ({
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    // toggleTodo: (id) => dispatch(toggleTodo(id)),
     deleteTodo: (id) => dispatch(deleteTodo(id)),
     addUrgentTodo: (id) => dispatch(addUrgentTodo(id))
 })

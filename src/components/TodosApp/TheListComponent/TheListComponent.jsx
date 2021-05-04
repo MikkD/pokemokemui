@@ -10,10 +10,12 @@ function TheListComponent({
     listName,
     color,
     todos,
-    toggleTodo
+    toggleTodo,
+    isUrgent
 }) {
     const classes = useStyles();
     console.log('TODOS_THE_LIST', todos)
+
     return (
         <React.Fragment>
             <Grid item className={classes.listStyles}>
@@ -26,6 +28,7 @@ function TheListComponent({
                     <List>
                         {todos.map(todo =>
                             <TheListItem
+                                isUrgentTodo={isUrgent}
                                 key={todo.id}
                                 todo={todo}
                                 toggleTodo={toggleTodo}

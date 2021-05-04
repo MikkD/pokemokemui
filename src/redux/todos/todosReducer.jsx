@@ -1,4 +1,5 @@
 import { todosTypes } from './todosTypes';
+import { filterData, toggleData } from './utils'
 
 const INITIAL_STATE = {
     isFetching: false,
@@ -29,20 +30,13 @@ const todosReducer = (state = INITIAL_STATE, action) => {
         case todosTypes.TOGGLE_TODO:
             return {
                 ...state,
-                todos: state.todos.map(todo => {
-                    if (todo.id === action.payload) {
-                        return {
-                            ...todo,
-                            completed: !todo.completed
-                        }
-                    }
-                    return todo
-                })
+                todos: toggleData(state.todos, action)
             }
         case todosTypes.DELETE_TODO:
             return {
                 ...state,
-                todos: state.todos.filter(todo => todo.id !== action.payload)
+                todos: filterData(state.todos, action),
+                urgentTodos: filterData(state.urgentTodos, action)
             }
         case todosTypes.ADD_TODO:
             return {
@@ -53,20 +47,12 @@ const todosReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 urgentTodos: [...state.urgentTodos, state.todos.find(todo => todo.id === action.payload)],
-                todos: state.todos.filter(todo => todo.id !== action.payload)
+                todos: filterData(state.todos, action)
             }
         case todosTypes.TOGGLE_URGENT_TODO:
             return {
                 ...state,
-                urgentTodos: state.urgentTodos.map(todo => {
-                    if (todo.id === action.payload) {
-                        return {
-                            ...todo,
-                            completed: !todo.completed
-                        }
-                    }
-                    return todo
-                })
+                urgentTodos: toggleData(state.urgentTodos, action)
             }
         default:
             return state
@@ -74,3 +60,5 @@ const todosReducer = (state = INITIAL_STATE, action) => {
 };
 
 export default todosReducer;
+
+
