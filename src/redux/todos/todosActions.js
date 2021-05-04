@@ -3,6 +3,7 @@ import { todosTypes } from './todosTypes';
 
 
 export const fetchTodos = () => {
+    console.log('API_CALL')
     const url = 'https://jsonplaceholder.typicode.com/users/1/todos';
     return async (dispatch) => {
         dispatch({ type: todosTypes.START_FETCHING })
@@ -16,4 +17,14 @@ export const fetchTodos = () => {
     }
 }
 
-export const toggleTodo = (id) => ({ type: todosTypes.TOGGLE_TODO, payload: id })
+export const toggleTodo = (id) => ({ type: todosTypes.TOGGLE_TODO, payload: id });
+
+export const toggleUrgentTodo = (id) => ({ type: todosTypes.TOGGLE_URGENT_TODO, payload: id });
+
+export const deleteTodo = (id) => ({ type: todosTypes.DELETE_TODO, payload: id });
+
+// export const deleteUrgentTodo = (id) => ({ type: todosTypes.DELETE_URGENT_TODO, payload: id });
+
+export const addTodo = (newTodo) => ({ type: todosTypes.ADD_TODO, payload: newTodo });
+
+export const addUrgentTodo = (newTodo) => ({ type: todosTypes.ADD_IMPORTANT_TODO, payload: newTodo });
