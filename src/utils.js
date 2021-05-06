@@ -4,6 +4,7 @@ import PokeMokeApp from './components/PokiMokiApp/PokeMokeApp';
 import MyBread from './components/MyBread/MyBread';
 import Timer from './components/Timer/Timer';
 import TodosApp from './components/TodosApp/TodosApp';
+import TodosApp2 from './components/TodosApp2/TodosApp2';
 import { makeStyles } from '@material-ui/core';
 
 export const routes = [
@@ -35,6 +36,11 @@ export const routes = [
         path: "/todos",
         component: <TodosApp />,
         name: "TodosApp"
+    },
+    {
+        path: "/todos2",
+        component: <TodosApp2 />,
+        name: "TodosApp2"
     }
 ];
 
@@ -45,4 +51,4 @@ export const useStyles = makeStyles((theme) => ({
             flexDirection: "column",
         }
     }
-}))
+}));

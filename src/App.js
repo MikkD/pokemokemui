@@ -11,14 +11,23 @@ import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { routes } from './utils';
 import MySnackBar from './components/MyBread/MySnackBar';
-import { Menu } from '@material-ui/core';
+import { Menu, Button } from '@material-ui/core';
 import { useStyles } from './utils';
 import { createMuiTheme, ThemeProvider, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+const customizedTheme = {
+  palette: {
+    primary: {
+      main: '#ff9149',
+    }
+  }
+}
+
+
 
 function App() {
-  const theme = createMuiTheme();
+  const theme = createMuiTheme(customizedTheme);
 
   return (
     <ThemeProvider theme={theme}>
@@ -67,6 +76,7 @@ function GlobalNav() {
 
   return (
     <AppBar position="static">
+
       <Toolbar variant="dense" style={{ display: "flex", justifyContent: "space-between" }}>
         {!xsAndDown && <TheList routes={routes} />}
         {xsAndDown &&

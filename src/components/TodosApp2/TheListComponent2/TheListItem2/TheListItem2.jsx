@@ -3,16 +3,15 @@ import { Divider, Typography, ListItem, ListItemText, ListItemIcon, IconButton, 
 import AssignmentLateIcon from '@material-ui/icons/AssignmentLate';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { connect } from 'react-redux';
-import { deleteTodo, addUrgentTodo } from '../../../../redux/todos/todosActions';
+import { deleteTodo, addUrgentTodo, toggleTodo } from '../../../../redux/todos2/todos2Actions';
 
-const TheListItem = ({
-    todo: { id, completed, title },
+const TheListItem2 = ({
+    todo: { id, completed, title, isUrgent },
     toggleTodo,
     deleteTodo,
     addUrgentTodo,
-    isUrgentTodo
 }) => {
-    console.log('THE_LIST_ITEM_RENDERED_with id ', id)
+    console.log('THE_LIST_ITEM_2_RENDERED_with id and name ', id)
 
     return (
         <React.Fragment>
@@ -29,7 +28,7 @@ const TheListItem = ({
                     aria-label="add urgent todo"
                     onClick={() => addUrgentTodo(id)}>
                     <IconButton>
-                        {!isUrgentTodo && <AssignmentLateIcon color="error" />}
+                        {!isUrgent && <AssignmentLateIcon color="error" />}
                     </IconButton>
                 </ListItemIcon>
                 <Divider style={{ width: '1px', height: '20px' }} />
@@ -47,7 +46,8 @@ const TheListItem = ({
 
 const mapDispatchToProps = (dispatch) => ({
     deleteTodo: (id) => dispatch(deleteTodo(id)),
-    addUrgentTodo: (id) => dispatch(addUrgentTodo(id))
+    addUrgentTodo: (id) => dispatch(addUrgentTodo(id)),
+    toggleTodo: (id) => dispatch(toggleTodo(id))
 })
 
-export default connect(null, mapDispatchToProps)(TheListItem)
+export default connect(null, mapDispatchToProps)(TheListItem2)

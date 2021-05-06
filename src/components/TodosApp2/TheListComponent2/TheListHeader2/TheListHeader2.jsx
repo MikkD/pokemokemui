@@ -1,10 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Box, Typography } from '@material-ui/core';
-import { todosSelectorSize } from '../../../../redux/todos/todosSelectors';
 
-const TheListHeader = ({ listName, color, todos }) => {
-    console.log('THE_LIST_HEADER_RENDERED')
+const TheListHeader2 = ({ listName, color, todosLen }) => {
+    console.log('THE_LIST_HEADER_2_RENDERED_withName', listName)
+
     return (
         <Box>
             <Typography
@@ -16,13 +15,11 @@ const TheListHeader = ({ listName, color, todos }) => {
                 gutterBottom
                 variant="subtitle1"
                 color="textSecondary" >
-                Number of {listName}: {todos.length}
+                Number of {listName}: {todosLen}
             </Typography>
         </Box>
     )
 };
 
-const mapStateToProps = (state) => ({
-    todosSelectorSize: todosSelectorSize(state)
-});
-export default connect(mapStateToProps, null)(TheListHeader)
+
+export default TheListHeader2;

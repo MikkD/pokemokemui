@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { fetchTodos, toggleUrgentTodo, toggleTodo, addUrgentTodo } from '../../redux/todos/todosActions';
-import { todosSelector, isErrorSelector, isFetchingSelector, urgentTodosSelector } from '../../redux/todos/todosSelectors';
+import { fetchTodos } from '../../redux/todos2/todos2Actions';
+import { todosSelector, isErrorSelector, isFetchingSelector, urgentTodosSelector } from '../../redux/todos2/todos2Selectors';
 import { Loader } from '../PokiMokiApp/utils';
 import { Container, Grid } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
-import TheListComponent from './TheListComponent/TheListComponent';
+import TheListComponent2 from './TheListComponent2/TheListComponent2';
 import TodoForm from './TodoForm/TodoForm';
 
-function TodosApp({ todos, isError, isFetching, fetchTodos, urgentTodos, toggleUrgentTodo, toggleTodo }) {
+function TodosApp2({ todos, isError, isFetching, fetchTodos, urgentTodos }) {
     console.log('%cTODOS_RENDERED', "color:gold", todos)
-    console.log('%cURGENT_TODOS_RENDERED', "color:pink", urgentTodos)
+    console.log('%curgentTodosSelector', "color:red", urgentTodos)
 
     useEffect(() => {
         fetchTodos()
@@ -24,17 +24,17 @@ function TodosApp({ todos, isError, isFetching, fetchTodos, urgentTodos, toggleU
         <React.Fragment>
             <Container>
                 <Grid container direction="column">
+                    <Typography style={{ textAlign: "center" }} variant="h4">TODO_2</Typography>
                     <TodoForm />
-                    <TheListComponent
-                        listName={'Urgent Todos'}
-                        isUrgent={true}
-                        color="secondary"
-                        toggleTodo={toggleUrgentTodo}
-                        todos={urgentTodos} />
-
-                    <TheListComponent
+                    {urgentTodos.length > 0 &&
+                        <TheListComponent2
+                            listName={'Urgent Todos'}
+                            color="secondary"
+                            todos={urgentTodos}
+                        />
+                    }
+                    <TheListComponent2
                         listName={'Default Todos'}
-                        toggleTodo={toggleTodo}
                         todos={todos} />
                 </Grid>
             </Container>
@@ -42,18 +42,19 @@ function TodosApp({ todos, isError, isFetching, fetchTodos, urgentTodos, toggleU
     )
 };
 
+
+
+
 const mapStateToProps = (state) => ({
-    todos: todosSelector(state),
     isError: isErrorSelector(state),
     isFetching: isFetchingSelector(state),
+    todos: todosSelector(state),
     urgentTodos: urgentTodosSelector(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
     fetchTodos: () => dispatch(fetchTodos()),
-    toggleUrgentTodo: (id) => dispatch(toggleUrgentTodo(id)),
-    toggleTodo: (id) => dispatch(toggleTodo(id)),
-    addUrgentTodo: (id) => dispatch(addUrgentTodo(id))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodosApp)
+export default connect(mapStateToProps, mapDispatchToProps)(TodosApp2)
+
